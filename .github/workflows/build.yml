@@ -1,17 +1,11 @@
 name: Build Application
 
-# This workflow runs on two triggers:
-# 1. workflow_dispatch: A manual "Run workflow" button on the Actions tab.
-# 2. push: tags: 'v*': Automatically runs when you push a new tag (e.g., v1.0.0, v1.0.1).
 on:
   push:
     tags:
       - 'v*'
   workflow_dispatch:
 
-# Permissions are still needed if you interact with the repo,
-# but 'contents: write' may not be necessary if you are only building.
-# Keeping it doesn't hurt.
 permissions:
   contents: write
 
@@ -42,7 +36,6 @@ jobs:
           --output-dir=build `
           --product-name="Email Sender" `
           --company-name="Tiago Almeida" `
-          # [CHECK] Make sure this is your script's filename
           email_app.py
 
       - name: Prepare Artifact
@@ -70,12 +63,13 @@ jobs:
 
       - name: Build with Nuitka
         run: |
-          python -m nuitka --onefile \
+          python -m nuitka --mode=app \
           --enable-plugin=tk-inter \
           --include-package-data=certifi \
           --output-dir=build \
           --product-name="Email Sender" \
-          email_app.py # [CHECK] Make sure this is your script's filename
+          --output-folder-name="Email Sender" \
+          email_app.py
 
       - name: Prepare Artifact
         run: |
@@ -106,7 +100,7 @@ jobs:
           --include-package-data=certifi \
           --output-dir=build \
           --product-name="Email Sender" \
-          email_app.py # [CHECK] Make sure this is your script's filename
+          email_app.py
 
       - name: Prepare Artifact
         run: |
