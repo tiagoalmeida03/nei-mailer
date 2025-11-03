@@ -1,0 +1,159 @@
+name: Build Application
+
+# This workflow runs on two triggers:
+# 1. workflow_dispatch: A manual "Run workflow" button on the Actions tab.
+# 2. push: tags: 'v*': Automatically runs when you push a new tag (e.g., v1.0.0, v1.0.1).
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  # This job creates a "draft" release on GitHub.
+  # The other jobs will then build the apps and upload them to this draft.
+  create-release:
+    name: Create Draft Release
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref_name }}
+          body: "Automated build for ${{ github.ref_name }}"
+          draft: true # Creates a draft. You must manually "publish" it later.
+          prerelease: false
+
+  # --- Build Job for Windows ---
+  build-windows:
+    name: Build (Windows)
+    needs: create-release # Waits for the release to be created first
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11' # Use a specific Python version
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install nuitka
+          pip install -r requirements.txt
+
+      - name: Build with Nuitka
+        run: |
+          python -m nuitka --onefile --windows-disable-console --enable-plugin=tk-inter `
+          --output-dir=build `
+          --product-name="Email Sender" `
+          --company-name="Your Name" `
+          --windows-icon-from-ico="assets/icon.ico" `
+          mail_app.py
+
+      - name: Prepare Artifact
+        shell: pwsh
+        run: |
+          Compress-Archive -Path build/mail_app.exe -DestinationPath build/Email-Sender-Windows.zip
+
+      - name: Upload to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./build/Email-Sender-Windows.zip
+          asset_name: Email-Sender-Windows.zip
+          asset_content_type: application/zip
+
+  # --- Build Job for macOS ---
+  build-macos:
+    name: Build (macOS)
+    needs: create-release
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install nuitka
+          pip install -r requirements.txt
+
+      - name: Build with Nuitka
+        run: |
+          python -m nuitka --onefile --enable-plugin=tk-inter `
+          --macos-create-app-bundle --macos-app-icon="assets/icon.png" `
+          --output-dir=build `
+          --product-name="Email Sender" `
+          mail_app.py
+
+      - name: Prepare Artifact
+        run: |
+          zip -r build/Email-Sender-MacOS.zip build/mail_app.app
+
+      - name: Upload to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./build/Email-Sender-MacOS.zip
+          asset_name: Email-Sender-MacOS.zip
+          asset_content_type: application/zip
+
+  # --- Build Job for Linux ---
+  build-linux:
+    name: Build (Linux)
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install nuitka
+          pip install -r requirements.txt
+
+      - name: Build with Nuitka
+        run: |
+          python -m nuitka --onefile --enable-plugin=tk-inter `
+          --output-dir=build `
+          --product-name="Email Sender" `
+          mail_app.py
+
+      - name: Prepare Artifact
+        run: |
+          mv build/mail_app.bin build/Email-Sender.bin
+          zip -j build/Email-Sender-Linux.zip build/Email-Sender.bin
+
+      - name: Upload to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./build/Email-Sender-Linux.zip
+          asset_name: Email-Sender-Linux.zip
+          asset_content_type: application/zip

@@ -1,12 +1,15 @@
 # Python
 __pycache__/
 *.pyc
+.env
 
-# PyInstaller
-*.spec
+# User files (CSV, templates, etc. should not be in the repo)
+*.csv
+*.txt
+*.png
+*.jpg
+
+# Build artifacts
 build/
 dist/
-
-# OS-specific
-.DS_Store
-Thumbs.db
+*.spec
