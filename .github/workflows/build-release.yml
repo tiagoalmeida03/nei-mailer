@@ -50,15 +50,15 @@ jobs:
         if [ "${{ runner.os }}" = "Windows" ]; then
           echo "APP_NAME=NEI-MAILER.exe" >> $GITHUB_ENV
           echo "ARCHIVE_NAME=NEI-MAILER-Windows.zip" >> $GITHUB_ENV
-          echo "FILE_PATH=dist/NEI-MAILER.exe"
+          echo "FILE_PATH=dist/NEI-MAILER.exe" >> $GITHUB_ENV
         elif [ "${{ runner.os }}" = "macOS" ]; then
           echo "APP_NAME=NEI-MAILER.app" >> $GITHUB_ENV
           echo "ARCHIVE_NAME=NEI-MAILER-macOS.zip" >> $GITHUB_ENV
-          echo "FILE_PATH=dist/NEI-MAILER.app"
+          echo "FILE_PATH=dist/NEI-MAILER.app" >> $GITHUB_ENV
         else
           echo "APP_NAME=NEI-MAILER" >> $GITHUB_ENV
           echo "ARCHIVE_NAME=NEI-MAILER-Linux.tar.gz" >> $GITHUB_ENV
-          echo "FILE_PATH=dist/NEI-MAILER"
+          echo "FILE_PATH=dist/NEI-MAILER" >> $GITHUB_ENV
         fi
       shell: bash
 
