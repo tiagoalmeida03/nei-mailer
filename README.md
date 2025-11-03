@@ -1,6 +1,6 @@
 # NEI MAILER
 
-A Python-based desktop application for sending personalized bulk emails with attachments, signatures, and variable substitution from CSV data.
+A Python-based desktop application for sending personalized bulk emails with attachments, signatures and variable substitution from CSV data.
 
 ## Features
 
@@ -55,7 +55,7 @@ This is the easiest way to get started. No Python required\!
       * **Linux:** [NEI-MAILER-Linux.tar.gz](https://github.com/tiagoalmeida03/nei-mailer/releases/download/v1.0.1/NEI-Mailer-Linux.tar.gz)
 4.  Unzip the file and run the `NEI MAILER` application.
 
-> **macOS Security Note:** The first time you run the app, you may need to right-click it, select "Open", and then confirm. Or, you may need to go to `System Settings > Privacy & Security` to grant it permission.
+> **macOS Security Note:** The first time you run the app, you may need to right-click it, select "Open" and then confirm. Or, you may need to go to `System Settings > Privacy & Security` to grant it permission.
 
 ### Option 2: Run from Source (For Developers)
 
@@ -179,7 +179,7 @@ jane@example.com;Jane Doe;Basic Plan;ACC-002
 
 2.  **Fill Email Details**
 
-      - Add subject, from name, and optional global CC/BCC
+      - Add subject, from name and optional global CC/BCC
 
 3.  **Select Required Files**
 
