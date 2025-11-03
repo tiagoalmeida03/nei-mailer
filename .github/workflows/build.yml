@@ -9,6 +9,10 @@ on:
       - 'v*'
   workflow_dispatch:
 
+# [FIX] Added permissions for creating releases and uploading assets
+permissions:
+  contents: write
+
 jobs:
   # This job creates a "draft" release on GitHub.
   # The other jobs will then build the apps and upload them to this draft.
@@ -163,3 +167,4 @@ jobs:
           asset_path: ./build/Email-Sender-Linux.zip
           asset_name: Email-Sender-Linux.zip
           asset_content_type: application/zip
+
