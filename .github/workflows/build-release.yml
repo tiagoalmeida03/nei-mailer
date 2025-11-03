@@ -42,7 +42,18 @@ jobs:
         pip install pyinstaller certifi
 
     - name: Build with PyInstaller
-      run: pyinstaller --onefile --windowed --name="NEI-MAILER" email_app.py
+      shell: bash
+      run: |
+        # Get the platform-specific path to the certifi CA bundle
+        CERTIFI_PATH=$(python -c "import certifi; print(certifi.where())")
+        
+        if [ "${{ runner.os }}" = "Windows" ]; then
+          # Windows uses a ';' separator for --add-data
+          pyinstaller --onefile --windowed --name="NEI-MAILER" --add-data="${CERTIFI_PATH};certifi" email_app.py
+        else
+          # macOS and Linux use a ':' separator
+          pyinstaller --onefile --windowed --name="NEI-MAILER" --add-data="${CERTIFI_PATH}:certifi" email_app.py
+        fi
 
     - name: Get artifact name
       id: get_name
