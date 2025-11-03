@@ -41,7 +41,8 @@ jobs:
 
       - name: Build with Nuitka
         run: |
-          python -m nuitka --onefile --windows-disable-console `
+          python -m nuitka --onefile --windows-console-mode=disable `
+          --assume-yes-for-downloads `
           --enable-plugin=tk-inter `
           --include-package-data=certifi `
           --output-dir=build `
