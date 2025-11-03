@@ -240,6 +240,17 @@ The `${SIGNATURE}` placeholder in your template is automatically replaced with y
 | Outlook (Free) | ~300 emails | 10-15 seconds |
 | Custom SMTP | Varies | Check provider docs |
 
+## Advanced Configuration
+
+### Multiple CC/BCC Recipients
+
+Separate multiple recipients with commas:
+```
+CC: manager@company.com, admin@company.com
+BCC: archive@company.com, backup@company.com
+```
+
+
 ## Limitations
 
 - **Single-file application**: No external configuration files
