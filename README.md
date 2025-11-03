@@ -240,31 +240,6 @@ The `${SIGNATURE}` placeholder in your template is automatically replaced with y
 | Outlook (Free) | ~300 emails | 10-15 seconds |
 | Custom SMTP | Varies | Check provider docs |
 
-## Advanced Configuration
-
-### HTML Email Formatting
-
-Your template supports HTML tags:
-
-```html
-<h1>Welcome ${NAME}!</h1>
-<p>Thank you for joining <strong>${COMPANY}</strong>.</p>
-<ul>
-  <li>Benefit 1</li>
-  <li>Benefit 2</li>
-</ul>
-
-${SIGNATURE}
-```
-
-### Multiple CC/BCC Recipients
-
-Separate multiple recipients with commas:
-```
-CC: manager@company.com, admin@company.com
-BCC: archive@company.com, backup@company.com
-```
-
 ## Limitations
 
 - **Single-file application**: No external configuration files
@@ -305,8 +280,6 @@ If you have Python installed and want to run the script directly:
     ```bash
     python email_app.py
     ```
-
----
 
 ## License
 
