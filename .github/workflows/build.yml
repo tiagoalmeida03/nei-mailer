@@ -52,17 +52,19 @@ jobs:
 
       - name: Build with Nuitka
         run: |
-          python -m nuitka --onefile --windows-disable-console --enable-plugin=tk-inter `
+          python -m nuitka --onefile --windows-disable-console `
+          --enable-plugin=tk-inter `
+          --enable-plugin=certifi ` # <-- [FIX] Added certifi plugin for SSL
           --output-dir=build `
           --product-name="Email Sender" `
           --company-name="Your Name" `
-          --windows-icon-from-ico="assets/icon.ico" `
-          mail_app.py
+          --windows-icon-from-ico="assets/icon.ico" ` # <-- [CHECK] Make sure this file exists
+          email_app.py # <-- [CHECK] Make sure this is your script's filename
 
       - name: Prepare Artifact
         shell: pwsh
         run: |
-          Compress-Archive -Path build/mail_app.exe -DestinationPath build/Email-Sender-Windows.zip
+          Compress-Archive -Path build/email_app.exe -DestinationPath build/Email-Sender-Windows.zip
 
       - name: Upload to Release
         uses: actions/upload-release-asset@v1
@@ -96,15 +98,17 @@ jobs:
 
       - name: Build with Nuitka
         run: |
-          python -m nuitka --onefile --enable-plugin=tk-inter `
-          --macos-create-app-bundle --macos-app-icon="assets/icon.png" `
+          python -m nuitka --onefile `
+          --enable-plugin=tk-inter `
+          --enable-plugin=certifi ` # <-- [FIX] Added certifi plugin for SSL
+          --macos-create-app-bundle --macos-app-icon="assets/icon.png" ` # <-- [CHECK] Make sure this file exists
           --output-dir=build `
           --product-name="Email Sender" `
-          mail_app.py
+          email_app.py # <-- [CHECK] Make sure this is your script's filename
 
       - name: Prepare Artifact
         run: |
-          zip -r build/Email-Sender-MacOS.zip build/mail_app.app
+          zip -r build/Email-Sender-MacOS.zip build/email_app.app
 
       - name: Upload to Release
         uses: actions/upload-release-asset@v1
@@ -138,14 +142,16 @@ jobs:
 
       - name: Build with Nuitka
         run: |
-          python -m nuitka --onefile --enable-plugin=tk-inter `
+          python -m nuitka --onefile `
+          --enable-plugin=tk-inter `
+          --enable-plugin=certifi ` # <-- [FIX] Added certifi plugin for SSL
           --output-dir=build `
           --product-name="Email Sender" `
-          mail_app.py
+          email_app.py # <-- [CHECK] Make sure this is your script's filename
 
       - name: Prepare Artifact
         run: |
-          mv build/mail_app.bin build/Email-Sender.bin
+          mv build/email_app.bin build/Email-Sender.bin
           zip -j build/Email-Sender-Linux.zip build/Email-Sender.bin
 
       - name: Upload to Release
