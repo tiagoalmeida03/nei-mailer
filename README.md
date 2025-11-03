@@ -304,18 +304,6 @@ For issues or questions:
 3. Verify all file formats and requirements
 4. Test with a small sample before bulk sending
 
-## Changelog
-
-### Version 1.0
-- Initial release
-- SMTP configuration support
-- CSV variable substitution
-- Image signature embedding
-- Multiple attachments
-- CC/BCC support
-- Thread-safe operation
-- Real-time logging
-
 ---
 
 **⚠️ Important**: Always test with a small batch of test emails before sending to your full recipient list. Review all configurations and test thoroughly to avoid sending errors to your entire mailing list.
