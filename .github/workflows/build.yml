@@ -38,12 +38,14 @@ jobs:
         run: |
           python -m nuitka --onefile --windows-disable-console `
           --enable-plugin=tk-inter `
-          --enable-plugin=certifi `
+          --include-package-data=certifi `
           --output-dir=build `
           --product-name="Email Sender" `
           --company-name="Your Name" `
-          --windows-icon-from-ico="assets/icon.ico" ` # [CHECK] Make sure this file exists
-          email_app.py # [CHECK] Make sure this is your script's filename
+          # [CHECK] Make sure this file exists
+          --windows-icon-from-ico="assets/icon.ico" `
+          # [CHECK] Make sure this is your script's filename
+          email_app.py
 
       - name: Prepare Artifact
         shell: pwsh
@@ -69,11 +71,10 @@ jobs:
           pip install nuitka certifi
 
       - name: Build with Nuitka
-        # [FIX] Changed line-continuation char from ` to \ for bash
         run: |
           python -m nuitka --onefile \
           --enable-plugin=tk-inter \
-          --enable-plugin=certifi \
+          --include-package-data=certifi \
           --macos-create-app-bundle --macos-app-icon="assets/icon.png" \
           --output-dir=build \
           --product-name="Email Sender" \
@@ -102,11 +103,10 @@ jobs:
           pip install nuitka certifi
 
       - name: Build with Nuitka
-        # [FIX] Changed line-continuation char from ` to \ for bash
         run: |
           python -m nuitka --onefile \
           --enable-plugin=tk-inter \
-          --enable-plugin=certifi \
+          --include-package-data=certifi \
           --output-dir=build \
           --product-name="Email Sender" \
           email_app.py # [CHECK] Make sure this is your script's filename
