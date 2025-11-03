@@ -273,6 +273,41 @@ BCC: archive@company.com, backup@company.com
 - **No analytics**: No open/click tracking
 - **Memory storage**: No persistent history beyond current session
 
+## Installation
+
+You can use NEI MAILER in two ways:
+
+### Option 1: Download the App (Recommended)
+
+This is the easiest way to get started. No Python required!
+
+1.  Go to the [**Releases Page**](https://github.com/tiagoalmeida03/YOUR-REPO-NAME/releases).
+2.  Find the latest release (e.g., `v1.0.0`).
+3.  Under the **Assets** section, download the file for your operating system:
+    * **Windows:** `NEI-MAILER-Windows.zip`
+    * **macOS:** `NEI-MAILER-macOS.zip`
+    * **Linux:** `NEI-MAILER-Linux.tar.gz`
+4.  Unzip the file and run the `NEI MAILER` application.
+
+> **macOS Security Note:** The first time you run the app, you may need to right-click it, select "Open", and then confirm. Or, you may need to go to `System Settings > Privacy & Security` to grant it permission.
+
+### Option 2: Run from Source (For Developers)
+
+If you have Python installed and want to run the script directly:
+
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/tiagoalmeida03/YOUR-REPO-NAME.git](https://github.com/tiagoalmeida03/YOUR-REPO-NAME.git)
+    cd YOUR-REPO-NAME
+    ```
+2.  **Ensure Python is installed** (v3.6+). All dependencies are in the standard library.
+3.  **Run the application:**
+    ```bash
+    python email_app.py
+    ```
+
+---
+
 ## License
 
 This is free and unencumbered software released into the public domain.
