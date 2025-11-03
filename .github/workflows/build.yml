@@ -41,9 +41,7 @@ jobs:
           --include-package-data=certifi `
           --output-dir=build `
           --product-name="Email Sender" `
-          --company-name="Tiago Almeida `
-          # [CHECK] Make sure this file exists (e.g., assets/icon.ico)
-          --windows-icon-from-ico="assets/icon.ico" `
+          --company-name="Tiago Almeida" `
           # [CHECK] Make sure this is your script's filename
           email_app.py
 
