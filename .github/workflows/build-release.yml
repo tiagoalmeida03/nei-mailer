@@ -8,6 +8,9 @@ on:
 
 jobs:
   build-apps:
+    permissions:
+      contents: write # <-- THIS IS THE FIX
+    
     # This job will run on a matrix of different operating systems
     runs-on: ${{ matrix.os }}
     strategy:
