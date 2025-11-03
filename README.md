@@ -242,21 +242,6 @@ The `${SIGNATURE}` placeholder in your template is automatically replaced with y
 
 ## Advanced Configuration
 
-### HTML Email Formatting
-
-Your template supports HTML tags:
-
-```html
-<h1>Welcome ${NAME}!</h1>
-<p>Thank you for joining <strong>${COMPANY}</strong>.</p>
-<ul>
-  <li>Benefit 1</li>
-  <li>Benefit 2</li>
-</ul>
-
-${SIGNATURE}
-```
-
 ### Multiple CC/BCC Recipients
 
 Separate multiple recipients with commas:
@@ -264,6 +249,7 @@ Separate multiple recipients with commas:
 CC: manager@company.com, admin@company.com
 BCC: archive@company.com, backup@company.com
 ```
+
 
 ## Limitations
 
@@ -281,12 +267,12 @@ You can use NEI MAILER in two ways:
 
 This is the easiest way to get started. No Python required!
 
-1.  Go to the [**Releases Page**](https://github.com/tiagoalmeida03/YOUR-REPO-NAME/releases).
+1.  Go to the [**Releases Page**](https://github.com/tiagoalmeida03/nei-mailer/releases).
 2.  Find the latest release (e.g., `v1.0.0`).
 3.  Under the **Assets** section, download the file for your operating system:
-    * **Windows:** `NEI-MAILER-Windows.zip`
-    * **macOS:** `NEI-MAILER-macOS.zip`
-    * **Linux:** `NEI-MAILER-Linux.tar.gz`
+   * **Windows:** [NEI-MAILER-Windows.zip](https://github.com/tiagoalmeida03/nei-mailer/releases/download/v1.0.0/NEI-MAILER-Windows.zip)
+   * **macOS:** [NEI-MAILER-macOS.zip](https://github.com/tiagoalmeida03/nei-mailer/releases/download/v1.0.0/NEI-MAILER-macOS.zip)
+   * **Linux:** [NEI-MAILER-Linux.tar.gz](https://github.com/tiagoalmeida03/nei-mailer/releases/download/v1.0.0/NEI-MAILER-Linux.tar.gz)
 4.  Unzip the file and run the `NEI MAILER` application.
 
 > **macOS Security Note:** The first time you run the app, you may need to right-click it, select "Open", and then confirm. Or, you may need to go to `System Settings > Privacy & Security` to grant it permission.
@@ -297,16 +283,14 @@ If you have Python installed and want to run the script directly:
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/tiagoalmeida03/YOUR-REPO-NAME.git](https://github.com/tiagoalmeida03/YOUR-REPO-NAME.git)
-    cd YOUR-REPO-NAME
+    git clone [https://github.com/tiagoalmeida03/nei-mailer.git](https://github.com/tiagoalmeida03/nei-mailer.git)
+    cd nei-mailer
     ```
 2.  **Ensure Python is installed** (v3.6+). All dependencies are in the standard library.
 3.  **Run the application:**
     ```bash
     python email_app.py
     ```
-
----
 
 ## License
 
