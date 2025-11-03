@@ -297,8 +297,8 @@ If you have Python installed and want to run the script directly:
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/tiagoalmeida03/YOUR-REPO-NAME.git](https://github.com/tiagoalmeida03/YOUR-REPO-NAME.git)
-    cd YOUR-REPO-NAME
+    git clone [https://github.com/tiagoalmeida03/nei-mailer.git](https://github.com/tiagoalmeida03/nei-mailer.git)
+    cd nei-mailer
     ```
 2.  **Ensure Python is installed** (v3.6+). All dependencies are in the standard library.
 3.  **Run the application:**
