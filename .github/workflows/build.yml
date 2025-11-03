@@ -57,6 +57,12 @@ jobs:
         run: |
           Compress-Archive -Path build/email_app.exe -DestinationPath build/Email-Sender-Windows.zip
 
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-artifact
+          path: build/Email-Sender-Windows.zip
+
   # --- Build Job for macOS ---
   build-macos:
     name: Build (macOS)
@@ -89,6 +95,12 @@ jobs:
         run: |
           zip -r build/Email-Sender-MacOS.zip "build/Email Sender.app"
 
+      - name: Upload macOS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-artifact
+          path: build/Email-Sender-MacOS.zip
+
   # --- Build Job for Linux ---
   build-linux:
     name: Build (Linux)
@@ -120,3 +132,43 @@ jobs:
         run: |
           mv build/email_app.bin build/Email-Sender.bin
           zip -j build/Email-Sender-Linux.zip build/Email-Sender.bin
+
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-artifact
+          path: build/Email-Sender-Linux.zip
+
+  # --- Create Release Job ---
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    # This job depends on the build jobs completing successfully
+    needs: [build-windows, build-macos, build-linux]
+    
+    # Only run this job when a tag is pushed (not on workflow_dispatch)
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    permissions:
+      # Required to create a release and upload assets
+      contents: write
+
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          # Path where all artifacts will be downloaded
+          path: artifacts/
+      
+      - name: List downloaded files (for debugging)
+        run: ls -R artifacts/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          # This action uses the GITHUB_TOKEN automatically
+          # It creates a release based on your tag name (e.g., "v1.2.3")
+          files: |
+            artifacts/windows-artifact/Email-Sender-Windows.zip
+            artifacts/macos-artifact/Email-Sender-MacOS.zip
+            artifacts/linux-artifact/Email-Sender-Linux.zip
