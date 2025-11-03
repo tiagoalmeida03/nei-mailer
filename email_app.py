@@ -295,6 +295,8 @@ class EmailApp(tk.Tk):
             subject = self.email_subject.get()
             from_display_name = self.email_from_name.get() # This is the "from" name
             reply_to_addr = self.email_reply_to.get() or user_email
+            
+            # Get GLOBAL CC/BCC lists from GUI
             cc_list = [email.strip() for email in self.email_cc.get().split(',') if email.strip()]
             bcc_list = [email.strip() for email in self.email_bcc.get().split(',') if email.strip()]
             
@@ -352,8 +354,21 @@ class EmailApp(tk.Tk):
             if not reader:
                 raise ValueError("CSV file is empty or formatted incorrectly.")
             
-            if 'EMAIL' not in reader[0]:
+            # Get header names, converting to uppercase for case-insensitive matching
+            headers = [h.upper() for h in reader[0].keys()]
+            if 'EMAIL' not in headers:
                 raise ValueError("CSV file must contain an 'EMAIL' column.")
+            
+            # Find the exact (case-sensitive) column names from the first row
+            # This allows users to have 'email' or 'Email' instead of just 'EMAIL'
+            email_col = next(h for h in reader[0].keys() if h.upper() == 'EMAIL')
+            cc_col = next((h for h in reader[0].keys() if h.upper() == 'CC'), None)
+            bcc_col = next((h for h in reader[0].keys() if h.upper() == 'BCC'), None)
+            
+            if cc_col:
+                self.log(f"Found 'CC' column in CSV: {cc_col}")
+            if bcc_col:
+                self.log(f"Found 'BCC' column in CSV: {bcc_col}")
             
             self.log(f"Found {len(reader)} recipients in CSV.")
 
@@ -371,7 +386,11 @@ class EmailApp(tk.Tk):
                         self.log("Stop signal received. Terminating process.")
                         break
                     
-                    recipient_email = row['EMAIL']
+                    recipient_email = row.get(email_col, '').strip()
+                    if not recipient_email:
+                        self.log(f"Skipping row {i}: No email address found in '{email_col}' column.")
+                        continue
+                        
                     self.log(f"--- Processing email {i}/{len(reader)} to {recipient_email} ---")
                     
                     try:
@@ -381,12 +400,39 @@ class EmailApp(tk.Tk):
                         msg['From'] = formataddr((from_display_name, user_email))
                         msg['To'] = recipient_email
                         msg['Reply-To'] = reply_to_addr
-                        if cc_list:
-                            msg['Cc'] = ", ".join(cc_list)
-                        if bcc_list:
-                            msg['Bcc'] = ", ".join(bcc_list)
                         
-                        all_recipients = [recipient_email] + cc_list + bcc_list
+                        # --- MODIFICATION: Handle dynamic CC/BCC from CSV ---
+            
+                        # Start with global lists (defined before the loop)
+                        current_cc_list = list(cc_list) 
+                        current_bcc_list = list(bcc_list)
+                        
+                        # Check for a 'CC' column in the CSV and add emails
+                        if cc_col and row.get(cc_col, '').strip():
+                            csv_cc_emails = [email.strip() for email in row[cc_col].split(',') if email.strip()]
+                            if csv_cc_emails:
+                                self.log(f"Adding CSV CCs: {', '.join(csv_cc_emails)}")
+                                current_cc_list.extend(csv_cc_emails)
+                        
+                        # Check for a 'BCC' column in the CSV and add emails
+                        if bcc_col and row.get(bcc_col, '').strip():
+                            csv_bcc_emails = [email.strip() for email in row[bcc_col].split(',') if email.strip()]
+                            if csv_bcc_emails:
+                                self.log(f"Adding CSV BCCs: {', '.join(csv_bcc_emails)}")
+                                current_bcc_list.extend(csv_bcc_emails)
+                        
+                        # De-duplicate and set headers
+                        if current_cc_list:
+                            unique_cc = sorted(list(set(current_cc_list)))
+                            msg['Cc'] = ", ".join(unique_cc)
+                        if current_bcc_list:
+                            unique_bcc = sorted(list(set(current_bcc_list)))
+                            msg['Bcc'] = ", ".join(unique_bcc)
+                        
+                        # Create the final recipient list for sendmail (must be de-duplicated)
+                        all_recipients = list(set([recipient_email] + current_cc_list + current_bcc_list))
+                        
+                        # --- END MODIFICATION ---
 
                         # Personalize and attach body
                         safe_row = {k: row.get(k, f'${{{k}}}') for k in row}
@@ -409,7 +455,6 @@ class EmailApp(tk.Tk):
                         sig_image.add_header('Content-Disposition', 'inline', filename=os.path.basename(sig_path))
                         msg.attach(sig_image)
 
-                        # --- MODIFIED ATTACHMENT LOGIC ---
                         # Add attachments
                         for filepath in attachment_files:
                             filename = os.path.basename(filepath)
@@ -424,7 +469,6 @@ class EmailApp(tk.Tk):
                             part.add_header('Content-Disposition', 'attachment', filename=filename)
                             
                             msg.attach(part)
-                        # --- END MODIFICATION ---
                         
                         # Send the email
                         # Use the raw user_email as the "from" address for sendmail
@@ -438,8 +482,9 @@ class EmailApp(tk.Tk):
                         self.log("Stop signal received. Terminating process.")
                         break
                     
-                    self.log(f"Waiting for {delay} second(s) delay...")
-                    time.sleep(delay)
+                    if i < len(reader) and not self.stop_event.is_set():
+                        self.log(f"Waiting for {delay} second(s) delay...")
+                        time.sleep(delay)
 
                 self.log("--- Email sending loop finished. ---")
             
