@@ -14,30 +14,9 @@ permissions:
   contents: write
 
 jobs:
-  # This job creates a "draft" release on GitHub.
-  # The other jobs will then build the apps and upload them to this draft.
-  create-release:
-    name: Create Draft Release
-    runs-on: ubuntu-latest
-    outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
-    steps:
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref_name }}
-          body: "Automated build for ${{ github.ref_name }}"
-          draft: true # Creates a draft. You must manually "publish" it later.
-          prerelease: false
-
   # --- Build Job for Windows ---
   build-windows:
     name: Build (Windows)
-    needs: create-release # Waits for the release to be created first
     runs-on: windows-latest
     steps:
       - name: Checkout code
@@ -82,7 +61,6 @@ jobs:
   # --- Build Job for macOS ---
   build-macos:
     name: Build (macOS)
-    needs: create-release
     runs-on: macos-latest
     steps:
       - name: Checkout code
@@ -126,7 +104,6 @@ jobs:
   # --- Build Job for Linux ---
   build-linux:
     name: Build (Linux)
-    needs: create-release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
