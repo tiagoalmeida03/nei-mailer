@@ -51,8 +51,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install nuitka
-          pip install -r requirements.txt
+          pip install nuitka certifi
 
       - name: Build with Nuitka
         run: |
@@ -97,8 +96,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install nuitka
-          pip install -r requirements.txt
+          pip install nuitka certifi
 
       - name: Build with Nuitka
         run: |
@@ -141,8 +139,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install nuitka
-          pip install -r requirements.txt
+          pip install nuitka certifi
 
       - name: Build with Nuitka
         run: |
