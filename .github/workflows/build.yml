@@ -41,8 +41,9 @@ jobs:
           --include-package-data=certifi `
           --output-dir=build `
           --product-name="Email Sender" `
-          --company-name="Your Name" `
-          # [CHECK] Make sure this file exists
+          --company-name="Tiago Almeida `
+          # [CHECK] Make sure this file exists (e.g., assets/icon.ico)
+          --windows-icon-from-ico="assets/icon.ico" `
           # [CHECK] Make sure this is your script's filename
           email_app.py
 
@@ -80,7 +81,7 @@ jobs:
 
       - name: Prepare Artifact
         run: |
-          zip -r build/Email-Sender-MacOS.zip build/email_app.app
+          zip -r build/Email-Sender-MacOS.zip "build/Email Sender.app"
 
   # --- Build Job for Linux ---
   build-linux:
