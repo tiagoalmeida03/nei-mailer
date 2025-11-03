@@ -9,7 +9,7 @@ on:
       - 'v*'
   workflow_dispatch:
 
-# [FIX] Added permissions for creating releases and uploading assets
+# Added permissions for creating releases and uploading assets
 permissions:
   contents: write
 
@@ -46,7 +46,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11' # Use a specific Python version
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
@@ -57,12 +57,12 @@ jobs:
         run: |
           python -m nuitka --onefile --windows-disable-console `
           --enable-plugin=tk-inter `
-          --enable-plugin=certifi ` # <-- [FIX] Added certifi plugin for SSL
+          --enable-plugin=certifi `
           --output-dir=build `
           --product-name="Email Sender" `
           --company-name="Your Name" `
-          --windows-icon-from-ico="assets/icon.ico" ` # <-- [CHECK] Make sure this file exists
-          email_app.py # <-- [CHECK] Make sure this is your script's filename
+          --windows-icon-from-ico="assets/icon.ico" ` # [CHECK] Make sure this file exists
+          email_app.py # [CHECK] Make sure this is your script's filename
 
       - name: Prepare Artifact
         shell: pwsh
@@ -99,14 +99,15 @@ jobs:
           pip install nuitka certifi
 
       - name: Build with Nuitka
+        # [FIX] Changed line-continuation char from ` to \ for bash
         run: |
-          python -m nuitka --onefile `
-          --enable-plugin=tk-inter `
-          --enable-plugin=certifi ` # <-- [FIX] Added certifi plugin for SSL
-          --macos-create-app-bundle --macos-app-icon="assets/icon.png" ` # <-- [CHECK] Make sure this file exists
-          --output-dir=build `
-          --product-name="Email Sender" `
-          email_app.py # <-- [CHECK] Make sure this is your script's filename
+          python -m nuitka --onefile \
+          --enable-plugin=tk-inter \
+          --enable-plugin=certifi \
+          --macos-create-app-bundle --macos-app-icon="assets/icon.png" \
+          --output-dir=build \
+          --product-name="Email Sender" \
+          email_app.py # [CHECK] Make sure this is your script's filename
 
       - name: Prepare Artifact
         run: |
@@ -142,13 +143,14 @@ jobs:
           pip install nuitka certifi
 
       - name: Build with Nuitka
+        # [FIX] Changed line-continuation char from ` to \ for bash
         run: |
-          python -m nuitka --onefile `
-          --enable-plugin=tk-inter `
-          --enable-plugin=certifi ` # <-- [FIX] Added certifi plugin for SSL
-          --output-dir=build `
-          --product-name="Email Sender" `
-          email_app.py # <-- [CHECK] Make sure this is your script's filename
+          python -m nuitka --onefile \
+          --enable-plugin=tk-inter \
+          --enable-plugin=certifi \
+          --output-dir=build \
+          --product-name="Email Sender" \
+          email_app.py # [CHECK] Make sure this is your script's filename
 
       - name: Prepare Artifact
         run: |
