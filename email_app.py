@@ -6,6 +6,8 @@ import csv
 import os
 import time
 import threading
+import ssl
+import certifi
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -357,7 +359,7 @@ class EmailApp(tk.Tk):
 
             # 7. Connect to SMTP Server
             self.log(f"Connecting to {host}:{port}...")
-            context = ssl.create_default_context()
+            context = ssl.create_default_context(cafile=certifi.where())
             with smtplib.SMTP(host, port) as server:
                 server.starttls(context=context)
                 server.login(user_email, password)
