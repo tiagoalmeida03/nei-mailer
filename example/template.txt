@@ -1,0 +1,11 @@
+Hi ${NAME},
+
+Thank you for your interest in ${COMPANY}. We are excited to connect with you.
+
+We wanted to share this additional information with you:
+${OPTIONAL_EXTRA}
+
+Please let us know if you have any questions or would like to set up a time to chat.
+
+Best regards,
+${SIGNATURE}

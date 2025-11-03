@@ -9,6 +9,16 @@ __pycache__/
 *.png
 *.jpg
 
+# Allow those file types inside the example/ folder (root example/ and any subfolders)
+!example/*.csv
+!example/*.txt
+!example/*.png
+!example/*.jpg
+!example/**/*.csv
+!example/**/*.txt
+!example/**/*.png
+!example/**/*.jpg
+
 # Build artifacts
 build/
 dist/
