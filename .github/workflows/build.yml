@@ -28,6 +28,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install nuitka certifi
 
+      - name: Set Version
+        shell: pwsh
+        run: |
+          if ("${{ github.ref_type }}" -eq "tag") {
+            $version = "${{ github.ref_name }}" -replace "^v", ""
+          } else {
+            $version = "0.0.0-dev"
+          }
+          "VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Host "Set version to $version"
+
       - name: Build with Nuitka
         run: |
           python -m nuitka --onefile --windows-disable-console `
@@ -36,6 +47,8 @@ jobs:
           --output-dir=build `
           --product-name="Email Sender" `
           --company-name="Tiago Almeida" `
+          --product-version=$env:VERSION `
+          --file-version=$env:VERSION `
           email_app.py
 
       - name: Prepare Artifact
