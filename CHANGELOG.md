@@ -18,4 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-* Initial project release.
+* Initial release
+* SMTP configuration support
+* CSV variable substitution
+* Image signature embedding
+* Multiple attachments
+* CC/BCC support
+* Thread-safe operation
+* Real-time logging
