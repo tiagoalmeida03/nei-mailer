@@ -46,7 +46,7 @@ jobs:
           --enable-plugin=tk-inter `
           --include-package-data=certifi `
           --output-dir=build `
-          --product-name="Email Sender" `
+          --product-name="NEI Mailer" `
           --company-name="Tiago Almeida" `
           --product-version=$env:VERSION `
           --file-version=$env:VERSION `
@@ -55,13 +55,13 @@ jobs:
       - name: Prepare Artifact
         shell: pwsh
         run: |
-          Compress-Archive -Path build/email_app.exe -DestinationPath build/Email-Sender-Windows.zip
+          Compress-Archive -Path build/email_app.exe -DestinationPath build/NEI-Mailer-Windows.zip
 
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows-artifact
-          path: build/Email-Sender-Windows.zip
+          path: build/NEI-Mailer-Windows.zip
 
   # --- Build Job for macOS ---
   build-macos:
@@ -87,19 +87,19 @@ jobs:
           --enable-plugin=tk-inter \
           --include-package-data=certifi \
           --output-dir=build \
-          --product-name="Email Sender" \
-          --output-folder-name="Email Sender" \
+          --product-name="NEI Mailer" \
+          --output-folder-name="NEI Mailer" \
           email_app.py
 
       - name: Prepare Artifact
         run: |
-          zip -r build/Email-Sender-MacOS.zip "build/Email Sender.app"
+          zip -r build/NEI-Mailer-MacOS.zip "build/NEI Mailer.app"
 
       - name: Upload macOS Artifact
         uses: actions/upload-artifact@v4
         with:
           name: macos-artifact
-          path: build/Email-Sender-MacOS.zip
+          path: build/NEI-Mailer-MacOS.zip
 
   # --- Build Job for Linux ---
   build-linux:
@@ -125,19 +125,19 @@ jobs:
           --enable-plugin=tk-inter \
           --include-package-data=certifi \
           --output-dir=build \
-          --product-name="Email Sender" \
+          --product-name="NEI Mailer" \
           email_app.py
 
       - name: Prepare Artifact
         run: |
-          mv build/email_app.bin build/Email-Sender.bin
-          zip -j build/Email-Sender-Linux.zip build/Email-Sender.bin
+          mv build/email_app.bin build/NEI-Mailer.bin
+          zip -j build/NEI-Mailer-Linux.zip build/NEI-Mailer.bin
 
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
         with:
           name: linux-artifact
-          path: build/Email-Sender-Linux.zip
+          path: build/NEI-Mailer-Linux.zip
 
   # --- Create Release Job ---
   create-release:
@@ -169,6 +169,6 @@ jobs:
           # This action uses the GITHUB_TOKEN automatically
           # It creates a release based on your tag name (e.g., "v1.2.3")
           files: |
-            artifacts/windows-artifact/Email-Sender-Windows.zip
-            artifacts/macos-artifact/Email-Sender-MacOS.zip
-            artifacts/linux-artifact/Email-Sender-Linux.zip
+            artifacts/windows-artifact/NEI-Mailer-Windows.zip
+            artifacts/macos-artifact/NEI-Mailer-MacOS.zip
+            artifacts/linux-artifact/NEI-Mailer-Linux.zip
