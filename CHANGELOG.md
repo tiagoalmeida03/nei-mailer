@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.1]
+## [1.0.2] - 2025-11-04
+
+### Fixed
+- Resolved a `UnicodeDecodeError` crash (e.g., `byte 0xe9`) that occurred on Windows when loading `.txt` template or `.csv` variable files.
+- The application now correctly falls back to `latin-1` encoding if `UTF-8` fails, allowing it to read files saved with the default Windows "ANSI" encoding.
+
+---
+
+## [1.0.1] - 2025-11-03
 
 ### Added
 
@@ -14,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **Multiple Recipient Support:** You can now add multiple email addresses to a single `CC` or `BCC` cell by separating them with a comma (`,`).
 * **Smart Combining:** Recipients found in the CSV file are automatically *added* to any "global" CC or BCC recipients already entered in the app's GUI.
 
-## [1.0.0]
+## [1.0.0] - 2025-11-03
 
 ### Added
 
