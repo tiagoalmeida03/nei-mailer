@@ -323,8 +323,15 @@ class EmailApp(tk.Tk):
 
             # 3. Read Template
             self.log(f"Reading template from: {template_path}")
-            with open(template_path, 'r', encoding='utf-8') as f:
-                template_content = f.read()
+            try:
+                # First, try to read as UTF-8
+                with open(template_path, 'r', encoding='utf-8') as f:
+                    template_content = f.read()
+            except UnicodeDecodeError:
+                # If UTF-8 fails, log it and retry with latin-1 (which handles cp1252)
+                self.log("UTF-8 decoding failed for template. Retrying with 'latin-1'...")
+                with open(template_path, 'r', encoding='latin-1') as f:
+                    template_content = f.read()
             
             # Convert text newlines to HTML line breaks
             template_content = template_content.replace('\n', '<br>')
@@ -347,9 +354,15 @@ class EmailApp(tk.Tk):
             
             # 6. Read CSV
             self.log(f"Reading variable table: {csv_path}")
-            with open(csv_path, 'r', encoding='utf-8-sig') as f: # 'utf-8-sig' handles BOM
-                # Specify the delimiter as a semicolon
-                reader = list(csv.DictReader(f, delimiter=';'))
+            try:
+                # First, try 'utf-8-sig' (handles BOM from Excel)
+                with open(csv_path, 'r', encoding='utf-8-sig') as f: 
+                    reader = list(csv.DictReader(f, delimiter=';'))
+            except UnicodeDecodeError:
+                # If UTF-8 fails, log it and retry with latin-1
+                self.log("UTF-8-SIG decoding failed for CSV. Retrying with 'latin-1'...")
+                with open(csv_path, 'r', encoding='latin-1') as f: 
+                    reader = list(csv.DictReader(f, delimiter=';'))
             
             if not reader:
                 raise ValueError("CSV file is empty or formatted incorrectly.")
